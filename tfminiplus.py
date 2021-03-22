@@ -1,6 +1,7 @@
 import time
 import serial
 import requests
+from pantilt import *
 
 '''
   programmed by Jongwook Si
@@ -52,7 +53,7 @@ def lidarstart():
     if checkHeader(rx_data[:5]):
         if not checkDataHeader(rx_data[5:7]):       
             print("Invalid Data Header")
-            return
+            return -1
         
 
         for i in range(len(rx_data)):
@@ -64,27 +65,52 @@ def lidarstart():
 
         distance = calDistance(rx_data[2], rx_data[3])
         print()
-        print("{:.1f} cm".format(distance))
+        
 
         print()
 
     else:
         if len(rx_data) == 0:
             print("Empty Data")
+            return -1
         else:
             print("Invalid Response Header")
-    
+            return -1
     ser.close()
-    return
+    return distance
    
+def scan(deg):
+    move(deg)
+    time.sleep(0.5)
+    distance = lidarstart()
+    print("deg:{} {:.1f} cm".format(deg,distance))
     
-if __name__ == '__main__':
-    
-    for j in range(500):
-        lidarstart()
-        time.sleep(1)
+    return round(distance, 1)
 
-          
+if __name__ == '__main__':
+    #init()
+    
+    for j in range(1):
+        init()
+        
+        scandata = []
+        for i in range(-90,91,1):
+            scandata.append(scan(i))
+            
+        
+        
+        scandata2 = []
+        for i in range(90,-91,-1):
+            scandata2.append(scan(i))
+            
+        scandata2.reverse()
+        print(scandata)
+        print(scandata2)
+
+        
+        end()
+        
+        
     
            
 
