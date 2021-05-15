@@ -1,4 +1,4 @@
-# humascott project
+# humascott project (2021.03.01 ~ 2021.04.01)
 
 dtpa.py : DTPA-UART-3232
 
